@@ -13,21 +13,25 @@ from the C++ standard library.*/
 //be useful thanks
 
 //Edit: Found the problem, wasn't allocating enough memory for the debug info of the location of vars so it corrupted the heap
-//but I cba going back and changing all this again. TODO: for the future. go through and change everything to use C++ strings and standard lib.
+//but I cba going back and changing all this again. TODO: for the future. go through and change everything to use C++ strings and standard lib. 
+//Another Project might be re-designing this into a GUI program but probably wont happen knowing me.
 
 void parse_function(Proto *p)
 {
 	int i;
 	
+	//formatting display to look all nice even though it still looks shite
 	if(p->source)
 		printf("-------Function: %s - Parameters: %d , Line defined: %d, Is Var Arg: %s ------------\n", p->source, p->numparams, p->linedefined, p->is_vararg == 1 ? "True" : "False");
 	else
 		printf("-------Function: %s - Parameters: %d , Line defined: %d, Is Var Arg: %s ------------\n", "(Unknown name)", p->numparams, p->linedefined, p->is_vararg == 1 ? "True" : "False");
 
+	//print upvalues
 	printf("%.*sUpvalues: %d\n", level + 2, space_filler, p->numupvalues);
 	for(i = 0; i < p->numupvalues; i++)
 		printf("%.*sValue Name: %d: %s\n", level + 6, space_filler, i, p->upvalues[i].name);
 
+	//print constants
 	printf("%.*sConstants: %d\n", level+2, space_filler, p->numconstants);
 	for (i = 0; i < p->numconstants; i++)
 	{
@@ -51,8 +55,10 @@ void parse_function(Proto *p)
 		}
 	}
 
-	//decompile instructions
+	//print number of vars in the program.
 	printf("%.*sLocal Variables: %d\n\n", level + 2, space_filler, p->numvars);
+
+	//disassemble instructions and print them
 	decompiler_main(p);
 
 	//redo for other proto's too (functions inside this one)
@@ -61,8 +67,10 @@ void parse_function(Proto *p)
 	//print out each of them on a higher level
 	for (i = 0; i < p->numprotos; i++)
 	{
+		//increase level indent for formatting
 		level += 5;
 		parse_function(p->protos[i]);
+		//decrease it again
 		level -= 5;
 	}
 
@@ -72,6 +80,7 @@ void decompiler_main(Proto *p)
 {
 	int spaces = 10;
 	Instruction *start = p->code;
+	//more unnecessary formatting
 	printf("----------------------------\n");
 	printf("%s%.*s%s %s %s\n","Opcode", level + spaces - 6, space_filler, "A", "B", "C");
 	for (int i = 0; i < p->codesize; i++)
@@ -79,10 +88,12 @@ void decompiler_main(Proto *p)
 		int kB, kC;
 		Instruction current = *start++;
 		int opcode = GET_OP(current);
+		//Original idea was putting all the opcodes into a string table and use the GET_OP as in index into this table.
 		//I really had no clue of a better way of doing this. C++ string classes refused to work and just broke everything, and the printf 
 		//string.h lib is awful. So yeah I just typed everything out. Fun.
 		switch (opcode)
 		{
+			//some of the opcodes have extra regs or the bits of the instruction may signify something else.
 		case OP_MOVE:
 			printf("%s%.*s%d %d\n", "MOVE", spaces - 4, space_filler, GETARG_A(current), GETARG_B(current));
 			break;
@@ -269,6 +280,7 @@ void decompiler_main(Proto *p)
 
 int RKB(int i)
 {
+	//check whether B is a constant by checking the 9th bit
 	if (GETARG_B(i) & BITRK)
 		return INDEXK(GETARG_B(i));
 	else
@@ -277,14 +289,11 @@ int RKB(int i)
 
 int RKC(int i)
 {
+	//check whether C is a constant by checking the 9th bit
 	if (GETARG_C(i) & BITRK)
 		return INDEXK(GETARG_C(i));
 	else
 		return GETARG_C(i);
 }
 
-void print_spaces(int num)
-{
-	for (int i = 0; i < num; i++)
-		printf(" ");
-}
+//removed print space function
