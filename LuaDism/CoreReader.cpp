@@ -140,7 +140,7 @@ void Load_DebugInfo(LoadS *loader, Proto *p)
 	load_bytes(loader, p->lineinfo, n * sizeof(int));
 
 	load_val(loader, &n, int);
-	total = n * sizeof(int);
+	total = n * sizeof(LocVar);
 	p->vars = (LocVar *) malloc(total);
 	p->numvars = n;
 

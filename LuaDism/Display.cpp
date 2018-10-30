@@ -9,6 +9,12 @@ from the C++ standard library.*/
 
 //Might plan to scrap all this and do it with string library later when it decides to work
 
+//There might be a heap corruption somewhere in the code elsewhere but I cant seem to find it, if anyone's got any idea where it would be that'd
+//be useful thanks
+
+//Edit: Found the problem, wasn't allocating enough memory for the debug info of the location of vars so it corrupted the heap
+//but I cba going back and changing all this again. TODO: for the future. go through and change everything to use C++ strings and standard lib.
+
 void parse_function(Proto *p)
 {
 	int i;
