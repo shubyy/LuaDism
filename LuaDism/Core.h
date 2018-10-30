@@ -78,7 +78,7 @@ typedef struct
 typedef struct
 {
 	char *pos; //position in buffer
-	int n; //unread
+	size_t n; //unread
 } LoadS;
 
 typedef struct 

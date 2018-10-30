@@ -26,7 +26,7 @@ void parse_function(Proto *p)
 
 	printf("%.*sUpvalues: %d\n", level + 2, space_filler, p->numupvalues);
 	for(i = 0; i < p->numupvalues; i++)
-		printf("%.*sValue Name: %d: %d\n", level + 6, space_filler, i, p->upvalues[i].name);
+		printf("%.*sValue Name: %d: %s\n", level + 6, space_filler, i, p->upvalues[i].name);
 
 	printf("%.*sConstants: %d\n", level+2, space_filler, p->numconstants);
 	for (i = 0; i < p->numconstants; i++)

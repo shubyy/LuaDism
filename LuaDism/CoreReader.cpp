@@ -38,6 +38,7 @@ char* load_string(LoadS *loader)
 	}
 	else
 		error("Unsupported string value contained.");
+	return NULL; //to remove annoying warning
 }
 
 void Load_Code(LoadS *loader, Proto *p)
