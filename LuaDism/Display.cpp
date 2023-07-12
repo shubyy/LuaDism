@@ -4,23 +4,11 @@
 
 int level = 0; //increases in multiple of twos to make the spacing better
 
-/*Would have done this in C++ instead of using shitty printf's but for some reason Visual Studio is retarded and this breaks if I use anything 
-from the C++ standard library.*/
-
-//Might plan to scrap all this and do it with string library later when it decides to work
-
-//There might be a heap corruption somewhere in the code elsewhere but I cant seem to find it, if anyone's got any idea where it would be that'd
-//be useful thanks
-
-//Edit: Found the problem, wasn't allocating enough memory for the debug info of the location of vars so it corrupted the heap
-//but I cba going back and changing all this again. TODO: for the future. go through and change everything to use C++ strings and standard lib. 
-//Another Project might be re-designing this into a GUI program but probably wont happen knowing me.
-
 void parse_function(Proto *p)
 {
 	int i;
 	
-	//formatting display to look all nice even though it still looks shite
+	//formatting display to look all nice
 	if(p->source)
 		printf("-------Function: %s - Parameters: %d , Line defined: %d, Is Var Arg: %s ------------\n", p->source, p->numparams, p->linedefined, p->is_vararg == 1 ? "True" : "False");
 	else
@@ -87,10 +75,6 @@ void decompiler_main(Proto *p)
 	{
 		int kB, kC;
 		Instruction current = *start++;
-		int opcode = GET_OP(current);
-		//Original idea was putting all the opcodes into a string table and use the GET_OP as in index into this table.
-		//I really had no clue of a better way of doing this. C++ string classes refused to work and just broke everything, and the printf 
-		//string.h lib is awful. So yeah I just typed everything out. Fun.
 		switch (opcode)
 		{
 			//some of the opcodes have extra regs or the bits of the instruction may signify something else.
